@@ -144,7 +144,6 @@
 			});
 			// Copy row width from whole table
 			base.$clonedHeader.each(function(a,b) {
-				console.log(base.$originalHeader[a]);
 				$(this).css('width', base.$originalHeader[a].offsetWidth);
 			});
 		};
@@ -160,7 +159,6 @@
 			});
 			// Copy row height from whole table
 			base.$clonedHeader.each(function(a,b) {
-				console.log(base.$originalHeader[a]);
 				$(this).css('height', base.$originalHeader[a].offsetHeight);
 			});
 		};
