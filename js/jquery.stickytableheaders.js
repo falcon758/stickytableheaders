@@ -29,7 +29,7 @@
 		base.isCloneVisible = false;
 		base.leftOffset = null;
 		base.topOffset = null;
-		
+
 		base.init = function () {
 			base.options = $.extend({}, defaults, options);
 
@@ -43,11 +43,11 @@
 
 				base.$originalHeader = $('thead', $this);
 				base.$clonedHeader = base.$originalHeader.clone();
-				
+
 				base.$originalHeader.each(function(a,b) {
 					height[a] = parseInt($(this).outerHeight(true));
 				});
-					
+
 				base.$clonedHeader.each(function(a,b) {
 					$(this).addClass('tableFloatingHeader');
 					$(this).css({
@@ -77,14 +77,17 @@
 					});
 				});
 				$this.bind('sortEnd', base.updateWidth);
+				$this.bind('sortEnd', base.updateHeight);
 			});
 
 			base.updateWidth();
+			base.updateHeight();
 			base.toggleHeaders();
 
 			base.$window.scroll(base.toggleHeaders);
 			base.$window.resize(base.toggleHeaders);
 			base.$window.resize(base.updateWidth);
+			base.$window.resize(base.updateHeight)
 		};
 
 		base.toggleHeaders = function () {
@@ -140,9 +143,27 @@
 				});
 			});
 			// Copy row width from whole table
-			base.$clonedHeader.css('width', base.$originalHeader.width());
+			base.$clonedHeader.each(function(a,b) {
+				console.log(base.$originalHeader[a]);
+				$(this).css('width', base.$originalHeader[a].offsetWidth);
+			});
 		};
 
+		base.updateHeight = function () {
+			// Copy cell heigths from original header
+			base.$clonedHeader.each(function(a,b) {
+				$('th', this).each(function (index) {
+					var $this = $(this);
+					var $origCell = $('th', base.$originalHeader[a]).eq(index);
+					$this.css('height', $origCell.height());
+				});
+			});
+			// Copy row height from whole table
+			base.$clonedHeader.each(function(a,b) {
+				console.log(base.$originalHeader[a]);
+				$(this).css('height', base.$originalHeader[a].offsetHeight);
+			});
+		};
 		// Run initializer
 		base.init();
 	}
